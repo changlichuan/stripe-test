@@ -17,20 +17,64 @@
     </div>
     <div class="card box-shadow mt-40">
       <div class="card-body">
-        <form name="payment-form">
+        <form id="payment-form">
           <div>
             <label for="email">Email address</label>
             <input type="email" class="form-control" id="email" name="email" placeholder="you@email.com">
           </div>
-          <div class="mt-20 text-center text-secondary border-placeholder">
-            Add Stripe Element here!
-          </div>
-          <div class="mt-20">
-            <button type="submit" class="btn btn-lg btn-block btn-primary">Pay $<span class="amount" data-amount="{{ amount }}"></span></button>
-          </div>
+            <div id="payment-element"></div>
+            <div class="mt-20">
+              <button type="submit" class="btn btn-lg btn-block btn-primary">Pay $<span class="amount" data-amount="{{ amount }}"></span></button>
+            </div>
         </form>
       </div>
     </div>
   </div>
 </div>
+<script src="https://js.stripe.com/v3/"></script>
+<script>
+  document.addEventListener("DOMContentLoaded", async () => {
+    const pub_key = (await fetch("/p_key").then(r => r.json()).then((data) => {
+      return data.key
+    }))
+    console.log(pub_key)
+    const stripe = Stripe(pub_key)
+
+    const clientS = await fetch("/paymentInt",{
+      method: "POST",
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({amount: "{{amount}}"})
+    })
+    .then(r => r.json())
+    .then(r => {
+      return r.clientSecret
+    })
+    console.log(clientS)
+    const element = stripe.elements({clientSecret: clientS})
+    const paymentElement = element.create("payment");
+    paymentElement.mount("#payment-element");
+    
+    const form=document.querySelector("#payment-form");
+    form.addEventListener("submit", async (event) => {
+      event.preventDefault();
+      await stripe.confirmPayment({
+        elements:element,
+        confirmParams: {
+          return_url: `http://127.0.0.1:5000/success`,
+        }
+      })
+    })
+
+  })
+</script>
+<!--div>
+    const {clientSecret} = await fetch("/paymentInt",{method: "POST"}).then(r=r.json())
+    
+    const paymentElement = element.create("payment",{clientSecret});
+    paymentElement.mount("#payment-element");
+    const paymentElement = element.create("payment",{clientSecret});
+
+</div-->
 {% endblock %}

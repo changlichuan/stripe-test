@@ -9,9 +9,16 @@
     </h1>
   </div>
   <div class="mt-40 text-center">
-    <div class="mt-20 text-center text-secondary border-placeholder">
-      Add details about the payment here!
+    <div class="mt-20 text-info">
+      Total Payment Made: €<span class="amount" data-amount="{{ amount_rcvd }}"></span>
     </div>
+    <div class="mt-20 text-info">
+      Your Reference: {{ pi_id }}
+    </div>
+    
+    <!-- <div class="mt-20 text-center text-secondary border-placeholder">
+      Add details about the payment here!
+    </div> -->
   </div>
 </main>
 {% endblock %}

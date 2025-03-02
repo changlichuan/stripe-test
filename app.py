@@ -1,8 +1,12 @@
 import os
 import stripe
+import json
+import logging
 
 from dotenv import load_dotenv
 from flask import Flask, request, render_template
+
+import random
 
 load_dotenv()
 
@@ -43,7 +47,59 @@ def checkout():
 # Success route
 @app.route('/success', methods=['GET'])
 def success():
-  return render_template('success.html')
+  _env = os.environ.get('FLASK_ENV');
+  if _env == 'development' :
+    stripe.api_key = os.environ.get('STRIPE_SECRET_KEY_TEST')
+  elif _env == 'production' :
+    stripe.api_key = os.environ.get('STRIPE_SECRET_KEY')
+  else :
+    return "no environment"
+  
+  payment_intent_id = request.args.get('payment_intent')
+  paymentIntent = stripe.PaymentIntent.retrieve(payment_intent_id)  
+  
+  return render_template('success.html',amount_rcvd=paymentIntent.amount_received, pi_id=paymentIntent.id)
+
+@app.route('/p_key', methods=['GET'])
+def p_key() :
+  res = {}
+  _env = os.environ.get('FLASK_ENV');
+  if _env == 'development' :
+    res['key'] = os.environ.get('STRIPE_PUBLISHABLE_KEY_TEST')
+  elif _env == 'production' :
+    res['key'] = os.environ.get('STRIPE_PUBLISHABLE_KEY')
+  else : 
+    res['key'] = None
+  return res
+
+@app.route('/paymentInt', methods=['POST'])
+def paymentInt() :
+  _env = os.environ.get('FLASK_ENV');
+  if _env == 'development' :
+    stripe.api_key = os.environ.get('STRIPE_SECRET_KEY_TEST')
+  elif _env == 'production' :
+    stripe.api_key = os.environ.get('STRIPE_SECRET_KEY')
+  else :
+    return "no environment"
+    
+    
+  try :
+    data = request.json
+    #_amount = request.args.get('amount')
+    _amount = data['amount']
+    paymentIntent = stripe.PaymentIntent.create(
+      amount=_amount,
+      currency='eur',
+      payment_method_types=["card"],
+    )
+    res = {}
+    res['clientSecret'] = paymentIntent.client_secret;
+    return res
+  except Exception as e: 
+    print(e.message)
+     
+  
+
 
 
 if __name__ == '__main__':
