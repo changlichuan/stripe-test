@@ -4,7 +4,7 @@ To get started, clone the repository and run pip3 to install dependencies:
 MacOS
 
 ```
-git clone https://github.com/changlichuan/stripe.git && cd stripe
+git clone https://github.com/changlichuan/stripe-test.git && cd stripe-test
 python3 -m venv venv
 source venv/bin/activate
 pip3 install -r requirements.txt

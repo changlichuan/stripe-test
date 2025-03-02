@@ -15,8 +15,9 @@ class DevelopmentConfig(Config):
 
 class ProductionConfig(Config):
     """Production configuration."""
-    pass  #  Or add production-only settings here
-
+    SECRET_KEY = os.getenv('STRIPE_SECRET_KEY')
+    PUBLISHABLE_KEY = os.getenv('STRIPE_PUBLISHABLE_KEY')
+    
 config = {
     'development': DevelopmentConfig,
     'production': ProductionConfig,

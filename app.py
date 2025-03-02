@@ -84,15 +84,5 @@ def paymentInt() :
   except Exception as e: 
     print(e.message)
      
-def get_key(type) :
-  _env = os.environ.get('FLASK_ENV');
-  if _env == config.ENV_PROD :
-    if type==config.SECRETKEY : return os.environ.get('STRIPE_SECRET_KEY')
-    else : return os.environ.get('STRIPE_PUBLISHABLE_KEY')
-  else :
-    if type==config.SECRETKEY : return os.environ.get('STRIPE_SECRET_KEY_TEST')
-    else : return os.environ.get('STRIPE_PUBLISHABLE_KEY_TEST')
-
-
 if __name__ == '__main__':
   app.run(port=5000, host='0.0.0.0', debug=True)
