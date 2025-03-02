@@ -6,7 +6,7 @@ import logging
 from dotenv import load_dotenv
 from flask import Flask, request, render_template
 
-from . import config 
+from .config import config
 
 load_dotenv()
 
@@ -14,6 +14,14 @@ app = Flask(__name__,
   static_url_path='',
   template_folder=os.path.join(os.path.dirname(os.path.abspath(__file__)), "views"),
   static_folder=os.path.join(os.path.dirname(os.path.abspath(__file__)), "public"))
+config_name = os.getenv('FLASK_ENV') or 'development'
+app.config.from_object(config[config_name])
+
+try:
+    app.config.from_pyfile('config.py')
+except FileNotFoundError:
+    print("Instance config file not found.")
+    pass
 
 # Home route
 @app.route('/', methods=['GET'])
@@ -47,7 +55,7 @@ def checkout():
 # Success route
 @app.route('/success', methods=['GET'])
 def success():
-  stripe.api_key = get_key(config.SECRETKEY)
+  stripe.api_key = app.config['SECRET_KEY']
   payment_intent_id = request.args.get('payment_intent')
   paymentIntent = stripe.PaymentIntent.retrieve(payment_intent_id)  
   
@@ -56,12 +64,12 @@ def success():
 @app.route('/p_key', methods=['GET'])
 def p_key() :
   res = {}
-  res['key'] = get_key(config.PUBKEY)
+  res['key'] = app.config['PUBLISHABLE_KEY']
   return res
 
 @app.route('/paymentInt', methods=['POST'])
 def paymentInt() :
-  stripe.api_key = get_key(config.SECRETKEY)
+  stripe.api_key = app.config['SECRET_KEY']
   try :
     data = request.json
     _amount = data['amount']
