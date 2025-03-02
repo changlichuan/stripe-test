@@ -34,9 +34,9 @@ Navigate to [http://localhost:5000](http://localhost:5000) to view the index pag
 - On loading of the checkout page: 
   - Publishable key will be obtained from the shop backend; shop frontend can then use it to re-initiate a stripe instance. [Stripe JS SDK]
   - Shop backend will request creation of a paymentIntent with Stripe backend, receiving a client_secret corresponding to this paymentintent. The client_secret will then be passed to the frontend [Stripe Python SDK]
-  - A paymentElements associated with the client_secret, thus paymentIntent, will be rendered onto payment-form DOM object. This will allow user to complete the payment with interacting directly with Stripe backend. This will minimize the PCI DSS scope.  [Stripe JS SDK]
-- Monitoring the submit event, users will be redirected to success page per return_url upon successful confirmPayment, appended with parameters such as paymentIntent id, payment_intent_client_secret, redirect_status [Stripe JS SDK]
-- On the Success page, the shop backend will retrieve the details using quoted paymentintent, displaying the amount_received and paymentIntent_id for users' reference, till this point completing the purchase+payment flow [Stripe Python SDK]
+  - A PaymentElements associated with received client_secret, as well as the earlier created PaymentIntent, will be mounted on the checkout page (onto the payment-form DOM object). This will allow user to complete the payment by interacting directly with Stripe backend. Such setup will minimize the PCI DSS scope.  [Stripe JS SDK]
+- Monitoring the "Submit" event, users will be redirected to success page per return_url upon successful ConfirmPayment, appended with url parameters such as paymentIntent id, payment_intent_client_secret, redirect_status [Stripe JS SDK]
+- On the Success page, the shop backend will retrieve the details using quoted PaymentIntent ID. Information such as amount_received and paymentIntent_id can then be passed to the Shop UI and displayed for users' reference. Up to this point completing the purchase+payment flow [Stripe Python SDK]
 
 ## Architecture
 - As no database is used, essential parameters are passed between frontend and backend via parameter or POST request body
