@@ -4,7 +4,7 @@ To get started, clone the repository and run pip3 to install dependencies:
 MacOS
 
 ```
-git clone https://github.com/marko-stripe/sa-takehome-project-python && cd sa-takehome-project-python
+git clone https://github.com/changlichuan/stripe.git && cd stripe
 python3 -m venv venv
 source venv/bin/activate
 pip3 install -r requirements.txt
@@ -14,8 +14,8 @@ Rename `sample.env` to `.env` and populate it with your Stripe account's test AP
 populate STRIPE_SECRET_KEY_TEST with your test secret key, starting with **sk_test**
 populate STRIPE_PUBLISHABLE_KEY_TEST with your test publishable-key, starting with **pk_test**
 
-STRIPE_SECRET_KEY and STRIPE_PUBLISHABLE_KEY are for illustration only
-These are meant for production keys which will process actual payments, and not recommended in such demo setup
+*STRIPE_SECRET_KEY and STRIPE_PUBLISHABLE_KEY are illustrative placeholder only*
+*These are meant for production keys which will process actual payments, and not recommended in such demo setup*
 
 Then run the application locally for development:
 ```
@@ -30,12 +30,12 @@ Application Flow:
 
 ![Swimlane](https://static.swimlanes.io/21cdd598f44d963658ab2d07e027078e.png)
 
-- Users will be directed to checkout page when clicking on any of the book at the Home page, selected item is passed via url parameters so expected payment amount can be rendered on the checkout page.
+- Users will be directed to checkout page when clicking on any of the book at the Home page, selected item is passed via url parameters.
 - On loading of the checkout page: 
-  - Publishable key will be obtained from the shop backend, to re-initiate a stripe instance in the shop frontend. [Stripe JS SDK]
-  - A paymentIntent will be created by the Stripe backend, returning received client_secret from Stripe Backend, corresponding to this paymentintent, to the frontend [Stripe Python SDK]
-  - A paymentElements associated with the client_secret, thus paymentIntent, will be rendered onto payment-form DOM object, allowing user to complete the payment [Stripe JS SDK]
-- Upon completion of the payment, users will be redirected to success page per return_url specified in the earlier call, appended with parameters such as paymentIntent id, payment_intent_client_secret, redirect_status [Stripe JS SDK]
+  - Publishable key will be obtained from the shop backend; shop frontend can then use it to re-initiate a stripe instance. [Stripe JS SDK]
+  - Shop backend will request creation of a paymentIntent with Stripe backend, receiving a client_secret corresponding to this paymentintent. The client_secret will then be passed to the frontend [Stripe Python SDK]
+  - A paymentElements associated with the client_secret, thus paymentIntent, will be rendered onto payment-form DOM object. This will allow user to complete the payment with interacting directly with Stripe backend. This will minimize the PCI DSS scope.  [Stripe JS SDK]
+- Monitoring the submit event of a payment, users will be redirected to success page per return_url specified in the earlier call, appended with parameters such as paymentIntent id, payment_intent_client_secret, redirect_status [Stripe JS SDK]
 - On the Success page, the shop backend will retrieve the details using quoted paymentintent, displaying the amount_received and paymentIntent_id for users' reference, till this point completing the purchase+payment flow [Stripe Python SDK]
 
 Architecture
