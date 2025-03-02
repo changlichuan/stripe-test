@@ -13,6 +13,7 @@ pip3 install -r requirements.txt
 Rename `sample.env` to `.env` and populate it with your Stripe account's test API keys.
 * Populate STRIPE_SECRET_KEY_TEST with your **test** secret key, starting with **sk_test**
 * populate STRIPE_PUBLISHABLE_KEY_TEST with your **test** publishable-key, starting with **pk_test**
+
 *Refer to https://docs.stripe.com/keys on how to obtain your keys from Stripe Dashboard*
 
 *STRIPE_SECRET_KEY and STRIPE_PUBLISHABLE_KEY are illustrative placeholder only*
