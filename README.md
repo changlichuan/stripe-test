@@ -50,6 +50,7 @@ Navigate to [http://localhost:5000](http://localhost:5000) to view the index pag
 
 ## Recommended extension
 *This demo is designed to be run locally, without a hosted webhook endpoint nor a DB thus limiting the supported workflows*
+
 Extensions:
 * Cart module that allows users to bundle serveral items into a single order
 * Order module that allows users to cancel or request refund, minimizing dispute
