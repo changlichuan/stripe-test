@@ -30,7 +30,7 @@ Navigate to [http://localhost:5000](http://localhost:5000) to view the index pag
 # Stripe API used and Architecture
 ## Application Flow: 
 
-![Swimlane](https://static.swimlanes.io/21cdd598f44d963658ab2d07e027078e.png)
+![Swimlane](https://static.swimlanes.io/16650432109e066598d581e661daaefc.png)
 
 - Users will be directed to checkout page when clicking on any of the book at the Home page, selected item is passed via url parameters.
 - On loading of the checkout page: 
