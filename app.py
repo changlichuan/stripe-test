@@ -75,7 +75,7 @@ def paymentInt() :
     _amount = data['amount']
     paymentIntent = stripe.PaymentIntent.create(
       amount=_amount,
-      currency='eur',
+      currency='sgd',
       payment_method_types=["card"],
     )
     res = {}
